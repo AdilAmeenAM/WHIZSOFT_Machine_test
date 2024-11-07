@@ -1,8 +1,12 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:whizsoft_chat_app_machine_test/core/theme/light_theme.dart';
-import 'package:whizsoft_chat_app_machine_test/feature/authendication/view/pages/login_or_register_page.dart';
+import 'package:whizsoft_chat_app_machine_test/feature/authendication/service/auth_gate.dart';
+import 'package:whizsoft_chat_app_machine_test/firebase_options.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   runApp(const App());
 }
 
@@ -14,7 +18,7 @@ class App extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: lightMode,
-      home: const LoginOrRegisterPage(),
+      home: const AuthGate(),
     );
   }
 }

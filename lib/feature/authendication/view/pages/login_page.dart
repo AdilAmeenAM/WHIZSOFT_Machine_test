@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:whizsoft_chat_app_machine_test/feature/authendication/service/auth_service.dart';
 import 'package:whizsoft_chat_app_machine_test/feature/authendication/view/widgets/custom_button.dart';
 import 'package:whizsoft_chat_app_machine_test/feature/authendication/view/widgets/custom_textfield_widget.dart';
 
@@ -11,7 +12,22 @@ class LoginPage extends StatelessWidget {
   final void Function() onTap;
   LoginPage({super.key, required this.onTap});
 
-  void login() {}
+  void login(BuildContext context) {
+    // auth service
+    final authService = AuthService();
+    // try login
+    try {
+      authService.signInWithEmailPassword(
+          _emailController.text, _passwordController.text);
+    } catch (e) {
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: Text(e.toString()),
+        ),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -55,7 +71,7 @@ class LoginPage extends StatelessWidget {
           // login button
           CustomButton(
             text: "Login",
-            onTap: login,
+            onTap: () => login(context),
           ),
 
           const SizedBox(
