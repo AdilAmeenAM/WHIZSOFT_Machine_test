@@ -115,8 +115,7 @@ class __$$UserModelImplCopyWithImpl<$Res>
 /// @nodoc
 @JsonSerializable()
 class _$UserModelImpl extends _UserModel {
-  const _$UserModelImpl({required this.userId, required this.email})
-      : super._();
+  _$UserModelImpl({required this.userId, required this.email}) : super._();
 
   factory _$UserModelImpl.fromJson(Map<String, dynamic> json) =>
       _$$UserModelImplFromJson(json);
@@ -161,10 +160,10 @@ class _$UserModelImpl extends _UserModel {
 }
 
 abstract class _UserModel extends UserModel {
-  const factory _UserModel(
+  factory _UserModel(
       {required final String userId,
       required final String email}) = _$UserModelImpl;
-  const _UserModel._() : super._();
+  _UserModel._() : super._();
 
   factory _UserModel.fromJson(Map<String, dynamic> json) =
       _$UserModelImpl.fromJson;

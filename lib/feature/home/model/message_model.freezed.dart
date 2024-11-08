@@ -139,12 +139,13 @@ class __$$MessageModelImplCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$MessageModelImpl implements _MessageModel {
-  const _$MessageModelImpl(
+class _$MessageModelImpl extends _MessageModel {
+  _$MessageModelImpl(
       {required this.senderID,
       required this.receiverID,
       required this.message,
-      required this.timestamp});
+      required this.timestamp})
+      : super._();
 
   factory _$MessageModelImpl.fromJson(Map<String, dynamic> json) =>
       _$$MessageModelImplFromJson(json);
@@ -198,12 +199,13 @@ class _$MessageModelImpl implements _MessageModel {
   }
 }
 
-abstract class _MessageModel implements MessageModel {
-  const factory _MessageModel(
+abstract class _MessageModel extends MessageModel {
+  factory _MessageModel(
       {required final String senderID,
       required final String receiverID,
       required final String message,
       required final DateTime timestamp}) = _$MessageModelImpl;
+  _MessageModel._() : super._();
 
   factory _MessageModel.fromJson(Map<String, dynamic> json) =
       _$MessageModelImpl.fromJson;

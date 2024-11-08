@@ -34,7 +34,7 @@ final router = GoRouter(
       path: ChatPage.routePath,
       builder: (context, state) {
         return ChatPage(
-          user: state as UserModel,
+          user: state.extra as UserModel,
         );
       },
     ),

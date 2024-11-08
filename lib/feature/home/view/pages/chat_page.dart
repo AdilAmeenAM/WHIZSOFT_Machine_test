@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:whizsoft_chat_app_machine_test/feature/authentication/model/user_model.dart';
-import 'package:whizsoft_chat_app_machine_test/feature/authentication/service/auth_service.dart';
 import 'package:whizsoft_chat_app_machine_test/feature/authentication/view/widgets/auth_text_field_widget.dart';
-import 'package:whizsoft_chat_app_machine_test/feature/home/service/chat_service.dart';
+import 'package:whizsoft_chat_app_machine_test/feature/home/controller/chat_controller.dart';
 
-class ChatPage extends HookWidget {
+class ChatPage extends HookConsumerWidget {
   static const routePath = "/chat";
 
   final UserModel user;
@@ -16,12 +16,19 @@ class ChatPage extends HookWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
-    final senderID = AuthService.getCurrentUser()!.uid;
+  Widget build(BuildContext context, WidgetRef ref) {
     final messageController = useTextEditingController();
 
     // send messages
-    void onSendMessagePressed() async {}
+    void onSendMessagePressed() async {
+      final message = messageController.text;
+      if (message.isEmpty) return;
+
+      await ref
+          .read(chatControllerProvider.notifier)
+          .sendMessage(user.userId, message);
+      messageController.clear();
+    }
 
     return Scaffold(
       appBar: AppBar(
@@ -32,29 +39,18 @@ class ChatPage extends HookWidget {
         children: [
           // display all messages
           Expanded(
-              child: StreamBuilder(
-            stream: ChatService.getMessages(user.userId, senderID),
-            builder: (context, snapshot) {
-              // errors
-              if (snapshot.hasError) {
-                return const Text("Error");
-              }
-              // loading
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return const Text("Loading..");
-              }
-              // return the list view
-              return ListView(
-                children: snapshot.data!.docs
-                    .map(
-                      (doc) => Text(
-                        (doc.data() as Map)["message"],
-                      ),
-                    )
-                    .toList(),
-              );
-            },
-          )),
+            child: ref.watch(chatMessagesProvider(user.userId)).when(
+                  data: (messages) => ListView.builder(
+                    itemCount: messages.length,
+                    itemBuilder: (context, index) {
+                      final message = messages[index];
+                      return Text(message.message);
+                    },
+                  ),
+                  loading: () => const Text("Loading.."),
+                  error: (error, stackTrace) => const Text("Error"),
+                ),
+          ),
 
           Row(
             children: [
