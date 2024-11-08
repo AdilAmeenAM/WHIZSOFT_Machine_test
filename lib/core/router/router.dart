@@ -1,7 +1,9 @@
 import 'package:go_router/go_router.dart';
+import 'package:whizsoft_chat_app_machine_test/feature/authentication/model/user_model.dart';
 import 'package:whizsoft_chat_app_machine_test/feature/authentication/service/auth_service.dart';
 import 'package:whizsoft_chat_app_machine_test/feature/authentication/view/pages/login_page.dart';
 import 'package:whizsoft_chat_app_machine_test/feature/authentication/view/pages/register_page.dart';
+import 'package:whizsoft_chat_app_machine_test/feature/home/view/pages/chat_page.dart';
 import 'package:whizsoft_chat_app_machine_test/feature/home/view/pages/home_page.dart';
 import 'package:whizsoft_chat_app_machine_test/main.dart';
 
@@ -27,6 +29,14 @@ final router = GoRouter(
     GoRoute(
       path: HomePage.routePath,
       builder: (context, state) => const HomePage(),
+    ),
+    GoRoute(
+      path: ChatPage.routePath,
+      builder: (context, state) {
+        return ChatPage(
+          user: state as UserModel,
+        );
+      },
     ),
   ],
 );

@@ -1,9 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:whizsoft_chat_app_machine_test/feature/authentication/model/user_model.dart';
 
 class AuthService {
   static final FirebaseAuth _auth = FirebaseAuth.instance;
-  static final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  static final userCollection =
+      FirebaseFirestore.instance.collection('users').withConverter(
+            fromFirestore: UserModel.fromFirestore,
+            toFirestore: (value, options) => value.toFirestore(),
+          );
 
   // get current user
   static User? getCurrentUser() {
@@ -30,10 +35,9 @@ class AuthService {
       UserCredential userCredential = await _auth
           .createUserWithEmailAndPassword(email: email, password: password);
 
-      await _firestore.collection('users').doc(userCredential.user!.uid).set({
-        "uid": userCredential.user!.uid,
-        "email": email,
-      });
+      await userCollection.doc(userCredential.user!.uid).set(
+            UserModel(userId: userCredential.user!.uid, email: email),
+          );
 
       return userCredential;
     } on FirebaseAuthException catch (e) {

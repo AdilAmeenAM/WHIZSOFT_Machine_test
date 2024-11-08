@@ -1,17 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:whizsoft_chat_app_machine_test/feature/authentication/model/user_model.dart';
 import 'package:whizsoft_chat_app_machine_test/feature/authentication/service/auth_service.dart';
 import 'package:whizsoft_chat_app_machine_test/feature/authentication/view/widgets/auth_text_field_widget.dart';
 import 'package:whizsoft_chat_app_machine_test/feature/home/service/chat_service.dart';
 
 class ChatPage extends HookWidget {
-  final String receiverEmail;
-  final String receiverID;
+  static const routePath = "/chat";
+
+  final UserModel user;
 
   const ChatPage({
     super.key,
-    required this.receiverEmail,
-    required this.receiverID,
+    required this.user,
   });
 
   @override
@@ -25,14 +26,14 @@ class ChatPage extends HookWidget {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.primary,
-        title: Text(receiverEmail),
+        title: Text(user.email),
       ),
       body: Column(
         children: [
           // display all messages
           Expanded(
               child: StreamBuilder(
-            stream: ChatService.getMessages(receiverID, senderID),
+            stream: ChatService.getMessages(user.userId, senderID),
             builder: (context, snapshot) {
               // errors
               if (snapshot.hasError) {

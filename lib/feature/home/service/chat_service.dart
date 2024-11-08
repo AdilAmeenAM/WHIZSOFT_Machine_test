@@ -1,15 +1,17 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:whizsoft_chat_app_machine_test/feature/authentication/model/user_model.dart';
+import 'package:whizsoft_chat_app_machine_test/feature/authentication/service/auth_service.dart';
 import 'package:whizsoft_chat_app_machine_test/feature/home/model/message_model.dart';
 
 class ChatService {
   static final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   static final FirebaseAuth _auth = FirebaseAuth.instance;
 
-  static Stream<List<Map<String, dynamic>>> getUsersStream() {
-    return _firestore.collection('users').snapshots().map((snapshot) {
-      return snapshot.docs.map((doc) => doc.data()).toList();
-    });
+  static Stream<List<UserModel>> getUsersStream() {
+    return AuthService.userCollection
+        .snapshots()
+        .map((snapshot) => snapshot.docs.map((doc) => doc.data()).toList());
   }
 
   // send messages
