@@ -8,9 +8,7 @@ import 'package:whizsoft_chat_app_machine_test/feature/home/view/widgets/user_ti
 class HomePage extends StatelessWidget {
   static const routePath = "/home";
 
-  HomePage({super.key});
-
-  final ChatService _chatService = ChatService();
+  const HomePage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -21,55 +19,43 @@ class HomePage extends StatelessWidget {
         title: const Center(child: Text("Home")),
       ),
       drawer: const CustomDrawerWidget(),
-      body: _buildUserList(),
+      body: StreamBuilder(
+          stream: ChatService.getUsersStream(),
+          builder: (context, snapshot) {
+            // error
+            if (snapshot.hasError) {
+              return const Text("Error");
+            }
+            // loading
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Text("Loading..");
+            }
+            // return list view
+            return ListView(
+              children: snapshot.data!.map(
+                (userData) {
+                  if (userData["email"] != AuthService.getCurrentUser()) {
+                    return UserTileWidget(
+                      text: userData["email"],
+                      onTap: () {
+                        // tapped on a user -> go to chat page
+                        Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) {
+                            return ChatPage(
+                              receiverEmail: userData["email"],
+                              receiverID: userData["uid"],
+                            );
+                          },
+                        ));
+                      },
+                    );
+                  } else {
+                    return Container();
+                  }
+                },
+              ).toList(),
+            );
+          }),
     );
-  }
-
-  // build a list of users except for the current logged in user
-  Widget _buildUserList() {
-    return StreamBuilder(
-        stream: _chatService.getUsersStream(),
-        builder: (context, snapshot) {
-          // error
-          if (snapshot.hasError) {
-            return const Text("Error");
-          }
-          // loading
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Text("Loading..");
-          }
-          // return list view
-          return ListView(
-            children: snapshot.data!.map(
-              (userData) {
-                return _buildUserListItem(userData, context);
-              },
-            ).toList(),
-          );
-        });
-  }
-
-  // build individual list tile for user
-  Widget _buildUserListItem(
-      Map<String, dynamic> userData, BuildContext context) {
-    // display all users except current user
-    if (userData["email"] != AuthService.getCurrentUser()) {
-      return UserTileWidget(
-        text: userData["email"],
-        onTap: () {
-          // tapped on a user -> go to chat page
-          Navigator.of(context).push(MaterialPageRoute(
-            builder: (context) {
-              return ChatPage(
-                receiverEmail: userData["email"],
-                receiverID: userData["uid"],
-              );
-            },
-          ));
-        },
-      );
-    } else {
-      return Container();
-    }
   }
 }

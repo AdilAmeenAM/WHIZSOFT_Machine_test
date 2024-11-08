@@ -2,8 +2,13 @@ import 'package:flutter/material.dart';
 
 class UserTileWidget extends StatelessWidget {
   final String text;
-  final void Function() onTap;
-  const UserTileWidget({super.key, required this.onTap, required this.text});
+  final VoidCallback onTap;
+
+  const UserTileWidget({
+    super.key,
+    required this.onTap,
+    required this.text,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -20,9 +25,7 @@ class UserTileWidget extends StatelessWidget {
           children: [
             // icon
             const Icon(Icons.person),
-            const SizedBox(
-              width: 20,
-            ),
+            const SizedBox(width: 20),
             // user name
             Text(text),
           ],

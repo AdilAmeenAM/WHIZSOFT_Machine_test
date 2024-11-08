@@ -26,7 +26,7 @@ final router = GoRouter(
     ),
     GoRoute(
       path: HomePage.routePath,
-      builder: (context, state) => HomePage(),
+      builder: (context, state) => const HomePage(),
     ),
   ],
 );
