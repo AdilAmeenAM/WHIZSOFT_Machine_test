@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:whizsoft_chat_app_machine_test/feature/authentication/controller/auth_controller.dart';
 import 'package:whizsoft_chat_app_machine_test/feature/authentication/view/pages/login_page.dart';
 import 'package:whizsoft_chat_app_machine_test/feature/authentication/view/widgets/auth_action_btn_widget.dart';
 import 'package:whizsoft_chat_app_machine_test/feature/authentication/view/widgets/auth_text_field_widget.dart';
-import 'package:go_router/go_router.dart';
 
 class RegisterPage extends HookConsumerWidget {
   static const routePath = '/register';
@@ -32,7 +32,7 @@ class RegisterPage extends HookConsumerWidget {
             .register(emailController.text, passwordController.text);
       }
 
-      isLoading.value = false;
+      // isLoading.value = false;
     }
 
     /// A callback to execute when the login link is pressed

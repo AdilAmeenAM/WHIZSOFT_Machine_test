@@ -19,7 +19,7 @@ class AuthActionBtnWidget extends StatelessWidget {
       child: Container(
         decoration: BoxDecoration(
             color: Theme.of(context).colorScheme.secondary,
-            borderRadius: BorderRadius.circular(8)),
+            borderRadius: BorderRadius.circular(16)),
         padding: const EdgeInsets.all(25),
         margin: const EdgeInsets.symmetric(horizontal: 25),
         child: Center(

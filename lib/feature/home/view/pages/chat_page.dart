@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:whizsoft_chat_app_machine_test/feature/authentication/model/user_model.dart';
+import 'package:whizsoft_chat_app_machine_test/feature/authentication/service/auth_service.dart';
 import 'package:whizsoft_chat_app_machine_test/feature/authentication/view/widgets/auth_text_field_widget.dart';
 import 'package:whizsoft_chat_app_machine_test/feature/home/controller/chat_controller.dart';
+import 'package:whizsoft_chat_app_machine_test/feature/home/view/widgets/message_box_widget.dart';
 
 class ChatPage extends HookConsumerWidget {
   static const routePath = "/chat";
@@ -32,43 +35,72 @@ class ChatPage extends HookConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.primary,
+        leading: IconButton(
+            onPressed: () {
+              context.pop();
+            },
+            icon: const Icon(Icons.arrow_back_ios)),
         title: Text(user.email),
+        centerTitle: true,
+        foregroundColor: Colors.grey.shade600,
       ),
-      body: Column(
-        children: [
-          // display all messages
-          Expanded(
-            child: ref.watch(chatMessagesProvider(user.userId)).when(
-                  data: (messages) => ListView.builder(
-                    itemCount: messages.length,
-                    itemBuilder: (context, index) {
-                      final message = messages[index];
-                      return Text(message.message);
+      body: Container(
+        margin: const EdgeInsets.only(top: 16),
+        child: Column(
+          children: [
+            // display all messages
+            Expanded(
+              child: ref.watch(chatMessagesProvider(user.userId)).when(
+                    data: (messages) {
+                      final currentUserID = AuthService.getCurrentUser()?.uid;
+
+                      return ListView.builder(
+                        itemCount: messages.length,
+                        itemBuilder: (context, index) {
+                          final message = messages[index];
+                          final isCurrentUser =
+                              message.senderID == currentUserID;
+
+                          return MessageBoxWidget(
+                              isCurrentUser: isCurrentUser,
+                              message: message.message);
+                        },
+                      );
                     },
+                    loading: () => const Text("Loading.."),
+                    error: (error, stackTrace) => const Text("Error"),
                   ),
-                  loading: () => const Text("Loading.."),
-                  error: (error, stackTrace) => const Text("Error"),
-                ),
-          ),
+            ),
 
-          Row(
-            children: [
-              // textfield should take up most of the uspace
-              Expanded(
-                child: AuthTextFieldWidget(
-                    hintText: "Type a message",
-                    obscureText: false,
-                    controller: messageController),
+            Padding(
+              padding: const EdgeInsets.only(bottom: 50),
+              child: Row(
+                children: [
+                  // textfield should take up most of the uspace
+                  Expanded(
+                    child: AuthTextFieldWidget(
+                        hintText: "Type a message",
+                        obscureText: false,
+                        controller: messageController),
+                  ),
+
+                  // send button
+                  Container(
+                    margin: const EdgeInsets.only(right: 25),
+                    decoration: BoxDecoration(
+                        color: Colors.green.shade300, shape: BoxShape.circle),
+                    child: IconButton(
+                        onPressed: onSendMessagePressed,
+                        icon: const Icon(
+                          Icons.arrow_upward,
+                          color: Colors.white,
+                        )),
+                  )
+                ],
               ),
-
-              // send button
-              IconButton(
-                  onPressed: onSendMessagePressed,
-                  icon: const Icon(Icons.arrow_upward))
-            ],
-          ),
-        ],
+            ),
+          ],
+        ),
       ),
     );
   }

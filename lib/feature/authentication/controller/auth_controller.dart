@@ -1,11 +1,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:go_router/go_router.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:whizsoft_chat_app_machine_test/core/utils/snackbar_utils.dart';
 import 'package:whizsoft_chat_app_machine_test/feature/authentication/service/auth_service.dart';
 import 'package:whizsoft_chat_app_machine_test/feature/authentication/view/pages/login_page.dart';
 import 'package:whizsoft_chat_app_machine_test/feature/home/view/pages/home_page.dart';
 import 'package:whizsoft_chat_app_machine_test/main.dart';
-import 'package:go_router/go_router.dart';
 
 part 'auth_controller.g.dart';
 
