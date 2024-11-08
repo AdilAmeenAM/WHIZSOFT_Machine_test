@@ -60,6 +60,7 @@ class HomePage extends StatelessWidget {
             builder: (context) {
               return ChatPage(
                 receiverEmail: userData["email"],
+                receiverID: userData["uid"],
               );
             },
           ));

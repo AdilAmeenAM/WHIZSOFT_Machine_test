@@ -13,4 +13,16 @@ class Message {
       required this.senderEmail,
       required this.senderID,
       required this.timestamp});
+
+  // converted to a map
+
+  Map<String, dynamic> toMAp() {
+    return {
+      'senderID': senderID,
+      'receiverID': receiverID,
+      'senderEmail': senderEmail,
+      ' message': message,
+      'timestamp': timestamp
+    };
+  }
 }
