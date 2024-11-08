@@ -2,48 +2,46 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class AuthService {
-  // instance of auth& firestore
-  final FirebaseAuth _auth = FirebaseAuth.instance;
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  static final FirebaseAuth _auth = FirebaseAuth.instance;
+  static final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   // get current user
-  User? getCurrentUser() {
+  static User? getCurrentUser() {
     return _auth.currentUser;
   }
 
   // sign in
-  Future<UserCredential> signInWithEmailPassword(
+  static Future<UserCredential> signInWithEmailPassword(
       String email, String password) async {
     try {
       UserCredential userCredential = await _auth.signInWithEmailAndPassword(
           email: email, password: password);
       return userCredential;
     } on FirebaseAuthException catch (e) {
-      throw Exception(e.code);
+      throw Exception(e.message);
     }
   }
 
   // sign up
-  Future<UserCredential> signUpWithEmailPassword(
+  static Future<UserCredential> signUpWithEmailPassword(
       String email, String password) async {
     try {
       // create user
       UserCredential userCredential = await _auth
           .createUserWithEmailAndPassword(email: email, password: password);
-      // save user info if it doesn't already exist
-      await _firestore.collection('Users').doc(userCredential.user!.uid).set({
+
+      await _firestore.collection('users').doc(userCredential.user!.uid).set({
         "uid": userCredential.user!.uid,
         "email": email,
       });
+
       return userCredential;
     } on FirebaseAuthException catch (e) {
-      throw Exception(e.code);
+      throw Exception(e.message);
     }
   }
 
-  // sing out
-  Future<void> signOut() async {
+  static Future<void> signOut() async {
     return await _auth.signOut();
   }
-  // errors
 }

@@ -1,9 +1,16 @@
 import 'package:flutter/material.dart';
 
-class CustomButton extends StatelessWidget {
-  final void Function() onTap;
+class AuthActionBtnWidget extends StatelessWidget {
+  final VoidCallback onTap;
   final String text;
-  const CustomButton({super.key, required this.text, required this.onTap});
+  final bool isLoading;
+
+  const AuthActionBtnWidget({
+    super.key,
+    required this.text,
+    required this.onTap,
+    this.isLoading = false,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +23,7 @@ class CustomButton extends StatelessWidget {
         padding: const EdgeInsets.all(25),
         margin: const EdgeInsets.symmetric(horizontal: 25),
         child: Center(
-          child: Text(text),
+          child: isLoading ? const CircularProgressIndicator() : Text(text),
         ),
       ),
     );

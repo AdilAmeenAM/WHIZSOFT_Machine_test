@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:whizsoft_chat_app_machine_test/feature/authendication/service/auth_service.dart';
-import 'package:whizsoft_chat_app_machine_test/feature/authendication/view/widgets/custom_textfield_widget.dart';
+import 'package:whizsoft_chat_app_machine_test/feature/authentication/service/auth_service.dart';
+import 'package:whizsoft_chat_app_machine_test/feature/authentication/view/widgets/auth_text_field_widget.dart';
 import 'package:whizsoft_chat_app_machine_test/feature/home/service/chat_service.dart';
 
 class ChatPage extends StatelessWidget {
@@ -14,7 +14,6 @@ class ChatPage extends StatelessWidget {
 
   // chat & auth services
   final ChatService _chatService = ChatService();
-  final AuthService _authService = AuthService();
 
   // send messages
   void sendMessages() async {
@@ -49,7 +48,7 @@ class ChatPage extends StatelessWidget {
 
   // build message list
   Widget _buildMessageList() {
-    String senderID = _authService.getCurrentUser()!.uid;
+    String senderID = AuthService.getCurrentUser()!.uid;
     return StreamBuilder(
       stream: _chatService.getMessages(receiverID, senderID),
       builder: (context, snapshot) {
@@ -87,7 +86,7 @@ class ChatPage extends StatelessWidget {
       children: [
         // textfield should take up most of the uspace
         Expanded(
-          child: CustomTextfieldWidget(
+          child: AuthTextFieldWidget(
               hintText: "Type a message",
               obscureText: false,
               controller: _messageController),

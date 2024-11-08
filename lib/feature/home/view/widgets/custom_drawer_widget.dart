@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:whizsoft_chat_app_machine_test/feature/authendication/service/auth_service.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:whizsoft_chat_app_machine_test/feature/authentication/controller/auth_controller.dart';
 import 'package:whizsoft_chat_app_machine_test/feature/home/view/pages/settings_page.dart';
 
-class CustomDrawerWidget extends StatelessWidget {
+class CustomDrawerWidget extends ConsumerWidget {
   const CustomDrawerWidget({super.key});
-  void logout() {
-    final auth = AuthService();
-    auth.signOut();
-  }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, ref) {
+    void onLogoutPressed() {
+      ref.read(authControllerProvider.notifier).signOut();
+    }
+
     return Drawer(
       backgroundColor: Theme.of(context).colorScheme.surface,
       child: Column(
@@ -52,7 +53,7 @@ class CustomDrawerWidget extends StatelessWidget {
             child: ListTile(
               title: const Text("L O G O U T"),
               leading: const Icon(Icons.logout),
-              onTap: logout,
+              onTap: onLogoutPressed,
             ),
           )
         ],

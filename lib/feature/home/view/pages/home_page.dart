@@ -1,15 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:whizsoft_chat_app_machine_test/feature/authendication/service/auth_service.dart';
-import 'package:whizsoft_chat_app_machine_test/feature/authendication/view/widgets/custom_drawer_widget.dart';
+import 'package:whizsoft_chat_app_machine_test/feature/authentication/service/auth_service.dart';
+import 'package:whizsoft_chat_app_machine_test/feature/home/view/widgets/custom_drawer_widget.dart';
 import 'package:whizsoft_chat_app_machine_test/feature/home/service/chat_service.dart';
 import 'package:whizsoft_chat_app_machine_test/feature/home/view/pages/chat_page.dart';
 import 'package:whizsoft_chat_app_machine_test/feature/home/view/widgets/user_tile_widget.dart';
 
 class HomePage extends StatelessWidget {
+  static const routePath = "/home";
+
   HomePage({super.key});
-  // chat & auth services
+
   final ChatService _chatService = ChatService();
-  final AuthService _authServices = AuthService();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -51,7 +53,7 @@ class HomePage extends StatelessWidget {
   Widget _buildUserListItem(
       Map<String, dynamic> userData, BuildContext context) {
     // display all users except current user
-    if (userData["email"] != _authServices.getCurrentUser()) {
+    if (userData["email"] != AuthService.getCurrentUser()) {
       return UserTileWidget(
         text: userData["email"],
         onTap: () {
