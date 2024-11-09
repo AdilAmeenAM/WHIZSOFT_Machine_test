@@ -5,6 +5,7 @@ import 'package:whizsoft_chat_app_machine_test/feature/authentication/view/pages
 import 'package:whizsoft_chat_app_machine_test/feature/authentication/view/pages/register_page.dart';
 import 'package:whizsoft_chat_app_machine_test/feature/home/view/pages/chat_page.dart';
 import 'package:whizsoft_chat_app_machine_test/feature/home/view/pages/home_page.dart';
+import 'package:whizsoft_chat_app_machine_test/feature/home/view/pages/settings_page.dart';
 import 'package:whizsoft_chat_app_machine_test/main.dart';
 
 final router = GoRouter(
@@ -37,6 +38,10 @@ final router = GoRouter(
           user: state.extra as UserModel,
         );
       },
+    ),
+    GoRoute(
+      path: SettingsPage.routePath,
+      builder: (context, state) => const SettingsPage(),
     ),
   ],
 );

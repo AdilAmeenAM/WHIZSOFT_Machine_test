@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:whizsoft_chat_app_machine_test/feature/authentication/controller/auth_controller.dart';
 import 'package:whizsoft_chat_app_machine_test/feature/home/view/pages/settings_page.dart';
@@ -31,7 +32,7 @@ class CustomDrawerWidget extends ConsumerWidget {
             leading: const Icon(Icons.home),
             onTap: () {
               // pop the drawer
-              Navigator.pop(context);
+              context.pop();
             },
           ),
           // settings list tile
@@ -40,10 +41,7 @@ class CustomDrawerWidget extends ConsumerWidget {
             leading: const Icon(Icons.settings),
             onTap: () {
               // naviagate to settings page
-              Navigator.of(context).pop();
-              Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => const SettingsPage(),
-              ));
+              context.go(SettingsPage.routePath);
             },
           ),
           const Spacer(),
